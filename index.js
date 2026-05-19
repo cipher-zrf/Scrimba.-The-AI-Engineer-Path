@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 checkEnvironment();
 
-const prompt = "Suggest some gifts for someone who loves hiphop music";
+const prompt = "Напиши коротко про Наполеона";
 
 console.log("Prompt:", prompt);
 console.log("Making AI request...");
