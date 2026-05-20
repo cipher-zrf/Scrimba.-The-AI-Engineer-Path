@@ -19,6 +19,7 @@ const userMessage = {
 const response = await openai.chat.completions.create({
   model: process.env.AI_MODEL,
   messages: [userMessage],
+  max_completion_tokens: 256,
 });
 
 console.log(response.choices[0].message.content);
