@@ -9,15 +9,33 @@ const openai = new OpenAI({
 
 checkEnvironment();
 
-const response = await openai.chat.completions.create({
+const messages = [
+  {
+    role: "user",
+    content: `Suggest some gifts for someone who loves hiphop music. 
+    Make these suggestions thoughtful and practical. Your response 
+    must be under 100 words. Skip intros and conclusions. 
+    Only output gift suggestions.`,
+  },
+];
+
+const firstResponse = await openai.chat.completions.create({
   model: process.env.AI_MODEL,
-  messages: [
-    {
-      role: "user",
-      content:
-        "Suggest some gifts for someone who loves hiphop music. Respond in under 100 words in formal tone",
-    },
-  ],
+  messages,
 });
 
-console.log(response.choices[0].message.content);
+console.log(firstResponse.choices[0].message.content);
+
+messages.push(firstResponse.choices[0].message);
+
+messages.push({
+  role: "user",
+  content: "More budget friendly. Less than $40.",
+});
+
+const secondResponse = await openai.chat.completions.create({
+  model: process.env.AI_MODEL,
+  messages,
+});
+
+console.log(secondResponse.choices[0].message.content);
