@@ -9,7 +9,8 @@ const openai = new OpenAI({
 
 checkEnvironment();
 
-const userPrompt = "Suggest some gifts for someone who loves hiphop music";
+const userPrompt =
+  "Suggest some gifts for someone who loves hiphop music. Respond in under 100 words in formal tone";
 
 const userMessage = {
   role: "user",
@@ -19,7 +20,6 @@ const userMessage = {
 const response = await openai.chat.completions.create({
   model: process.env.AI_MODEL,
   messages: [userMessage],
-  max_completion_tokens: 256,
 });
 
 console.log(response.choices[0].message.content);
