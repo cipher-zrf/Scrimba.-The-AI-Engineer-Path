@@ -9,17 +9,15 @@ const openai = new OpenAI({
 
 checkEnvironment();
 
-const userPrompt =
-  "Suggest some gifts for someone who loves hiphop music. Respond in under 100 words in formal tone";
-
-const userMessage = {
-  role: "user",
-  content: userPrompt,
-};
-
 const response = await openai.chat.completions.create({
   model: process.env.AI_MODEL,
-  messages: [userMessage],
+  messages: [
+    {
+      role: "user",
+      content:
+        "Suggest some gifts for someone who loves hiphop music. Respond in under 100 words in formal tone",
+    },
+  ],
 });
 
 console.log(response.choices[0].message.content);
