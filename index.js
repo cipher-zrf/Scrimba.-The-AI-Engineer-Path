@@ -41,14 +41,19 @@ async function handleGiftRequest(e) {
     content: userPrompt,
   });
 
-  const response = await openai.chat.completions.create({
-    model: process.env.AI_MODEL,
-    messages,
-  });
+  try {
+    const response = await openai.chat.completions.create({
+      model: process.env.AI_MODEL,
+      messages,
+    });
 
-  outputContent.textContent = response.choices[0].message.content;
-
-  setLoading(false);
+    outputContent.textContent = response.choices[0].message.content;
+  } catch (e) {
+    console.log(`Error ${e}`);
+    outputContent.textContent = "Error, try again";
+  } finally {
+    setLoading(false);
+  }
 }
 
 start();
