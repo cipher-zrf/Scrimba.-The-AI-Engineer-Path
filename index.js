@@ -49,7 +49,9 @@ async function handleGiftRequest(e) {
       messages,
     });
 
-    outputContent.innerHTML = DOMPurify.sanitize(marked.parse(giftSuggestions));
+    outputContent.innerHTML = DOMPurify.sanitize(
+      marked.parse(response.choices[0].message.content),
+    );
   } catch (e) {
     console.log(`Error ${e}`);
     outputContent.textContent = "Error, try again";
