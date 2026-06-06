@@ -1,5 +1,7 @@
 import OpenAI from "openai";
 import { autoResizeTextarea, checkEnvironment, setLoading } from "./utils.js";
+import { marked } from "marked";
+import DOMPurify from "dompurify";
 checkEnvironment();
 
 const openai = new OpenAI({
@@ -47,7 +49,7 @@ async function handleGiftRequest(e) {
       messages,
     });
 
-    outputContent.textContent = response.choices[0].message.content;
+    outputContent.innerHTML = DOMPurify.sanitize(marked.parse(giftSuggestions));
   } catch (e) {
     console.log(`Error ${e}`);
     outputContent.textContent = "Error, try again";
