@@ -1,5 +1,10 @@
 import OpenAI from "openai";
-import { autoResizeTextarea, checkEnvironment, setLoading } from "./utils.js";
+import {
+  autoResizeTextarea,
+  checkEnvironment,
+  setLoading,
+  showStream,
+} from "./utils.js";
 import { marked } from "marked";
 import DOMPurify from "dompurify";
 checkEnvironment();
@@ -44,14 +49,25 @@ async function handleGiftRequest(e) {
   });
 
   try {
-    const response = await openai.chat.completions.create({
+    const stream = await openai.chat.completions.create({
       model: process.env.AI_MODEL,
       messages,
+      stream: true,
     });
 
-    outputContent.innerHTML = DOMPurify.sanitize(
-      marked.parse(response.choices[0].message.content),
-    );
+    let giftSuggestions = "";
+
+    showStream();
+
+    for await (const chunk of stream) {
+      giftSuggestions += chunk.choices[0].delta.content;
+
+      const html = marked.parse(giftSuggestions);
+
+      const safeHTML = DOMPurify.sanitize(html);
+
+      outputContent.innerHTML = safeHTML;
+    }
   } catch (e) {
     console.log(`Error ${e}`);
     outputContent.textContent = "Error, try again";
